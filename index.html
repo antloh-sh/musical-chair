@@ -1,84 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Musical Chairs</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui; background: linear-gradient(135deg, #ff9a9e, #fecfef); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .container { text-align: center; max-width: 400px; width: 100%; }
-        h1 { font-size: clamp(1.5rem, 5vw, 2.5rem); margin-bottom: 20px; color: #333; }
-        #status { font-size: 1.2rem; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 10px; font-weight: bold; }
-        #playBtn { font-size: clamp(1.2rem, 8vw, 2rem); width: 120px; height: 120px; border: none; border-radius: 50%; background: #4CAF50; color: white; cursor: pointer; transition: all 0.3s; margin: 20px; }
-        #playBtn:hover, #playBtn:active { background: #45a049; transform: scale(1.05); }
-        #controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        input { width: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
-        button { padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; }
-        @media (max-width: 480px) { body { padding: 10px; } input { width: 70px; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musical Chairs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fecfef);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-bottom: 20px;
+      color: #333;
+    }
+    #status {
+      font-size: 1.1rem;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    #playBtn {
+      font-size: clamp(1.2rem, 8vw, 2rem);
+      width: 120px;
+      height: 120px;
+      border: none;
+      border-radius: 50%;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    #playBtn:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    #controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 5px;
+    }
+    label {
+      font-size: 0.9rem;
+      color: #222;
+    }
+    input[type="number"] {
+      width: 70px;
+      padding: 8px;
+      margin-left: 4px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.95rem;
+    }
+    button.small-btn {
+      padding: 8px 14px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button.small-btn:active {
+      transform: scale(0.97);
+    }
+    footer {
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: rgba(0,0,0,0.7);
+    }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      #playBtn { width: 110px; height: 110px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎵 Musical Chairs 🎪</h1>
-        <div id="status">Click START to begin!</div>
-        <audio id="music" loop preload="auto">
-            <source src="music.mp3" type="audio/mpeg">
-        </audio>
-        <button id="playBtn">▶️</button>
-        <div id="controls">
-            <label>Min: <input type="number" id="minSec" value="20" min="5" max="60"></label>
-            <label>Max: <input type="number" id="maxSec" value="30" min="5" max="60"></label>
-            <button onclick="resetMusic()">🔄 Reset</button>
-        </div>
-        <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">For community events – music stops randomly!</p>
+  <div class="container">
+    <h1>🎵 Musical Chairs 🎪</h1>
+
+    <div id="status">Tap START to begin.</div>
+
+    <!-- music.mp3 must be in the same folder as this HTML -->
+    <audio id="music" loop preload="auto">
+      <source src="music.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <button id="playBtn">START</button>
+
+    <div id="controls">
+      <label>
+        Min (s):
+        <input type="number" id="minSec" value="20" min="5" max="60">
+      </label>
+      <label>
+        Max (s):
+        <input type="number" id="maxSec" value="30" min="5" max="120">
+      </label>
+      <button class="small-btn" id="resetBtn">Reset</button>
     </div>
-    <script>
-        const audio = document.getElementById('music');
-        const playBtn = document.getElementById('playBtn');
-        const status = document.getElementById('status');
-        let gameInterval;
 
-        playBtn.addEventListener('click', toggleGame);
+    <footer>Music stops randomly between min and max seconds each round.</footer>
+  </div>
 
-        function toggleGame() {
-            if (audio.paused || audio.ended) {
-                startRound();
-                playBtn.textContent = '⏸️';
-                playBtn.style.background = '#f44336';
-            } else {
-                stopRound();
-                playBtn.textContent = '▶️';
-                playBtn.style.background = '#4CAF50';
-            }
-        }
+  <script>
+    const audio = document.getElementById('music');
+    const playBtn = document.getElementById('playBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const statusEl = document.getElementById('status');
 
-        function startRound() {
-            audio.currentTime = 0;
-            audio.play();
-            status.textContent = '🕺 Music ON – Walk around chairs!';
-            const min = parseInt(document.getElementById('minSec').value);
-            const max = parseInt(document.getElementById('maxSec').value);
-            const duration = Math.floor(Math.random() * (max - min + 1)) + min * 1000;
-            gameInterval = setTimeout(() => {
-                audio.pause();
-                status.textContent = '🪑 Music OFF – Grab a chair! Remove one.';
-            }, duration);
-        }
+    let roundTimeout = null;
+    let isRunning = false; // game state: music auto-random-running or not
 
-        function stopRound() {
-            audio.pause();
-            clearTimeout(gameInterval);
-            status.textContent = 'Paused. Click ▶️ to resume.';
-        }
+    playBtn.addEventListener('click', () => {
+      if (!isRunning) {
+        startRound();
+      } else {
+        pauseGame();
+      }
+    });
 
-        function resetMusic() {
-            stopRound();
-            audio.currentTime = 0;
-            status.textContent = 'Reset. Click START!';
-        }
+    resetBtn.addEventListener('click', resetGame);
 
-        audio.addEventListener('ended', () => audio.currentTime = 0); // Loop fallback
-    </script>
+    function getRandomDurationMs() {
+      const min = parseInt(document.getElementById('minSec').value, 10);
+      const max = parseInt(document.getElementById('maxSec').value, 10);
+      const safeMin = isNaN(min) ? 20 : Math.max(1, min);
+      const safeMax = isNaN(max) ? 30 : Math.max(safeMin, max);
+      const seconds = Math.floor(Math.random() * (safeMax - safeMin + 1)) + safeMin;
+      return seconds * 1000;
+    }
+
+    function startRound() {
+      isRunning = true;
+      clearTimeout(roundTimeout);
+
+      // Continue from where it last paused; do NOT reset currentTime
+      audio.play().catch(() => {
+        statusEl.textContent = 'Tap START again to allow audio on this device.';
+      });
+
+      playBtn.textContent = 'PAUSE';
+      playBtn.style.background = '#f44336';
+      statusEl.textContent = '🕺 Music ON – walk around the chairs!';
+
+      const duration = getRandomDurationMs();
+      roundTimeout = setTimeout(() => {
+        audio.pause();
+        statusEl.textContent = '🪑 Music OFF – grab a chair and remove one player.';
+        // Next tap on START will continue from this exact point in the track
+        isRunning = false;
+        playBtn.textContent = 'START';
+        playBtn.style.background = '#4CAF50';
+      }, duration);
+    }
+
+    function pauseGame() {
+      isRunning = false;
+      clearTimeout(roundTimeout);
+      audio.pause();
+      playBtn.textContent = 'START';
+      playBtn.style.background = '#4CAF50';
+      statusEl.textContent = 'Paused. Tap START to continue from this point.';
+    }
+
+    function resetGame() {
+      pauseGame();
+      audio.currentTime = 0; // full restart of the track
+      statusEl.textContent = 'Reset. Tap START to begin a new round.';
+    }
+
+    // Loop is handled by the loop attribute; this is optional safety:
+    audio.addEventListener('ended', () => {
+      // With loop attribute, browser restarts automatically.
+      // This handler can stay empty or be used for logging.
+    });
+  </script>
 </body>
 </html>
